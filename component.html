@@ -1,0 +1,92 @@
+<polymer-element name="ceci-editform" attributes="dataName" dataName="MyData" extends="ceci-element">
+  <template>
+    <link rel="stylesheet" href="component.css">
+    <div class="form">
+    </div>
+    <shadow></shadow>
+    <script type="text/json" id="ceci-definition">
+      {
+        "listeners": {
+          "editItem": {
+            "description": "Set the item to edit with the form.",
+            "label": "Set Edit Item"
+          },
+          "submitForm": {
+            "description": "Submit this form.",
+            "label": "Submit Form"
+          }
+        },
+        "attributes": {
+          "dataName": {
+            "description": "Name for your data storage thingy.",
+            "label": "Data Name",
+            "editable": "text"
+          }
+        }
+      }
+    </script>
+  </template>
+  <description>
+    Edits an item!
+  </description>
+  <tags>form,edit,data</tags>
+  <thumbnail>
+      <img src="thumbnail.png" />
+  </thumbnail>
+    <script>
+      Polymer("ceci-editform", {
+        storedData : {},
+        db: {},
+        datascope: {},
+        storedData: {},
+        ready: function(){
+          this.super();
+        },
+        editItem : function(scope){
+          this.datascope = scope;
+          this.db = JSON.parse(localStorage.getItem("db")) || {};
+          this.storedData = this.db;
+
+          for (var i = 0; i < this.datascope.length; i++){
+            var scopeItem = this.datascope[i];
+            this.storedData = this.storedData[scopeItem["dataset"]][scopeItem["index"]];
+          }
+
+          var form = this.shadowRoot.querySelector(".form");
+          form.innerHTML = "";
+          var self = this;
+
+          for(key in this.storedData){
+            if(typeof this.storedData[key] != "object"){
+              var input = document.createElement("input");
+              input.value = this.storedData[key];
+              input.setAttribute("storeName",key);
+              form.appendChild(input);
+            }
+          }
+        },
+        submitForm : function(){
+
+          var newData = this.storedData;
+          var fields = this.shadowRoot.querySelectorAll(".form input");
+
+          for (var field in fields) {
+            if (fields.hasOwnProperty(field)) {
+              var f = fields[field];
+              var name = f.getAttribute("storeName");
+              var value = f.value;
+              newData[name] = value;
+            }
+          }
+
+          this.storedData = newData;
+
+          localStorage.setItem("db",JSON.stringify(this.db));
+
+          var event = new CustomEvent("storage");
+          window.dispatchEvent(event);
+        }
+
+      });
+    </script>
+</polymer-element>

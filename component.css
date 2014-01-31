@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  background: #EFEFEF;
+}
+
+:host h1 {
+  font-size: 18px;
+  border-bottom: solid 2px #CCC;
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+  text-shadow: 0px 1px 0px white;
+}
+
+:host input {
+  display: block;
+  padding: 5px;
+  width: 100%;
+  font-size: 16px;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+}
+
+:host p {
+  color: white;
+  background: green;
+  cursor: pointer;
+  padding: 5px 10px;
+  display: inline-block;
+}
